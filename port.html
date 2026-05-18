@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hariprasaad M — Full Stack Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --bg2: #0f1117;
+    --bg3: #161a24;
+    --surface: #1a1f2e;
+    --border: #232840;
+    --gold: #c9a84c;
+    --gold2: #e8c56a;
+    --gold-dim: rgba(201,168,76,0.12);
+    --text: #e8eaf0;
+    --text-muted: #8892a4;
+    --text-dim: #4a5568;
+    --accent: #4f8ef7;
+    --accent2: #7c3aed;
+    --green: #34d399;
+    --red: #f87171;
+    --white: #ffffff;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.35;
+  }
+ 
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+ 
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(10,12,16,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    transition: all 0.3s;
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--white);
+    letter-spacing: -0.5px;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-cta {
+    padding: 0.5rem 1.4rem;
+    border: 1px solid var(--gold);
+    color: var(--gold) !important;
+    border-radius: 4px;
+    font-size: 0.78rem !important;
+    letter-spacing: 0.12em !important;
+    transition: all 0.25s !important;
+  }
+  .nav-cta:hover { background: var(--gold); color: var(--bg) !important; }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { width: 24px; height: 2px; background: var(--text); display: block; transition: all 0.3s; }
+ 
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 8rem 4rem 4rem;
+    overflow: hidden;
+  }
+  .hero-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 40%, transparent 100%);
+  }
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(ellipse, rgba(201,168,76,0.08) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .hero-glow2 {
+    position: absolute;
+    width: 400px; height: 400px;
+    background: radial-gradient(ellipse, rgba(79,142,247,0.06) 0%, transparent 70%);
+    top: 30%; right: 10%;
+    pointer-events: none;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1rem;
+    background: var(--gold-dim);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--gold2);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.4); }
+  }
+  .hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -2px;
+    color: var(--white);
+    animation: fadeUp 0.8s 0.1s ease both;
+    margin-bottom: 0.5rem;
+  }
+  .hero-name .gold { color: var(--gold); }
+  .hero-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s 0.2s ease both;
+    letter-spacing: 0.05em;
+  }
+  .hero-title .cursor {
+    display: inline-block;
+    width: 2px; height: 1.1em;
+    background: var(--gold);
+    margin-left: 2px;
+    animation: blink 1s infinite;
+    vertical-align: text-bottom;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+  .hero-desc {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 600px;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+  .btn-primary {
+    padding: 0.85rem 2rem;
+    background: var(--gold);
+    color: var(--bg);
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .btn-primary:hover { background: var(--gold2); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201,168,76,0.3); }
+  .btn-outline {
+    padding: 0.85rem 2rem;
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 4rem;
+    animation: fadeUp 0.8s 0.5s ease both;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .stat-item {}
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
+  .hero-scroll {
+    position: absolute;
+    bottom: 2.5rem;
+    right: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+  }
+  .hero-scroll::before {
+    content: '';
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, var(--gold));
+    animation: scrollLine 2s ease infinite;
+  }
+  @keyframes scrollLine { 0%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1);transform-origin:top} 50.1%{transform:scaleY(1);transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
+ 
+  /* ── SECTIONS ── */
+  section {
+    padding: 7rem 4rem;
+    position: relative;
+  }
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .section-label::before {
+    content: '';
+    width: 40px; height: 1px;
+    background: var(--gold);
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+  .section-sub {
+    color: var(--text-muted);
+    font-size: 1rem;
+    max-width: 560px;
+    margin-bottom: 3.5rem;
+  }
+ 
+  /* ── ABOUT ── */
+  #about { background: var(--bg2); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 5rem;
+    align-items: start;
+  }
+  .about-avatar-wrap {
+    position: relative;
+  }
+  .avatar-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--accent), var(--gold2));
+  }
+  .avatar-initials {
+    width: 100px; height: 100px;
+    background: linear-gradient(135deg, var(--gold-dim), rgba(79,142,247,0.1));
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--gold);
+    margin: 0 auto 1.5rem;
+  }
+  .avatar-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.3rem;
+  }
+  .avatar-role {
+    font-size: 0.8rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .avatar-info { font-size: 0.85rem; color: var(--text-muted); }
+  .avatar-info div { padding: 0.5rem 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
+  .avatar-info div:last-child { border-bottom: none; }
+  .avatar-info span:first-child { color: var(--text-dim); }
+  .avatar-info span:last-child { color: var(--text); font-weight: 500; }
+  .about-text h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+  .about-text p {
+    color: var(--text-muted);
+    margin-bottom: 1.2rem;
+    font-size: 0.97rem;
+  }
+  .about-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 2rem;
+  }
+  .tag {
+    padding: 0.35rem 0.9rem;
+    background: var(--gold-dim);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 100px;
+    font-size: 0.78rem;
+    color: var(--gold2);
+    font-weight: 500;
+  }
+  .contact-links { margin-top: 2rem; display: flex; flex-direction: column; gap: 0.8rem; }
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .contact-item:hover { color: var(--gold); }
+  .contact-icon {
+    width: 34px; height: 34px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+ 
+  /* ── SKILLS ── */
+  #skills { background: var(--bg); }
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .skill-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.8rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .skill-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .skill-card:hover { border-color: rgba(201,168,76,0.4); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
+  .skill-card:hover::after { transform: scaleX(1); }
+  .skill-cat {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 1rem;
+  }
+  .skill-cat-icon {
+    font-size: 1.6rem;
+    margin-bottom: 0.8rem;
+  }
+  .skill-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+  .skill-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .pill {
+    padding: 0.25rem 0.7rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    transition: all 0.2s;
+  }
+  .pill:hover { border-color: var(--gold); color: var(--gold2); background: var(--gold-dim); }
+ 
+  /* AI TOOLS SPECIAL */
+  .skill-card.ai-card { background: linear-gradient(135deg, var(--surface), rgba(124,58,237,0.05)); border-color: rgba(124,58,237,0.25); }
+  .skill-card.ai-card .skill-cat { color: #a78bfa; }
+  .skill-card.ai-card .pill { border-color: rgba(124,58,237,0.2); }
+  .skill-card.ai-card .pill:hover { border-color: #a78bfa; color: #c4b5fd; background: rgba(124,58,237,0.1); }
+ 
+  /* ── EXPERIENCE ── */
+  #experience { background: var(--bg2); }
+  .timeline {
+    position: relative;
+    padding-left: 3rem;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 3.5rem;
+    animation: fadeUp 0.6s ease both;
+  }
+  .timeline-dot {
+    position: absolute;
+    left: -3.4rem;
+    top: 0.3rem;
+    width: 14px; height: 14px;
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    background: var(--bg2);
+  }
+  .timeline-dot.active { background: var(--gold); box-shadow: 0 0 0 4px rgba(201,168,76,0.15); }
+  .timeline-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 2rem;
+    transition: all 0.3s;
+  }
+  .timeline-card:hover { border-color: rgba(201,168,76,0.3); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+  .timeline-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.8rem;
+    flex-wrap: wrap;
+  }
+  .timeline-company {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: var(--gold-dim);
+    border: 1px solid rgba(201,168,76,0.2);
+    padding: 0.2rem 0.7rem;
+    border-radius: 4px;
+  }
+  .timeline-duration {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .timeline-role {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+  .timeline-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem; }
+  .timeline-points { list-style: none; }
+  .timeline-points li {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    padding: 0.35rem 0;
+    padding-left: 1.2rem;
+    position: relative;
+  }
+  .timeline-points li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-size: 0.7rem;
+    top: 0.45rem;
+  }
+  .timeline-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+  .tech-badge {
+    padding: 0.2rem 0.6rem;
+    background: rgba(79,142,247,0.08);
+    border: 1px solid rgba(79,142,247,0.2);
+    border-radius: 4px;
+    font-size: 0.72rem;
+    color: #93c5fd;
+    font-family: 'JetBrains Mono', monospace;
+  }
+ 
+  /* ── PROJECTS ── */
+  #projects { background: var(--bg); }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 1.5rem;
+  }
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  .project-card:hover { border-color: rgba(201,168,76,0.35); transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+  .project-banner {
+    height: 180px;
+    background: linear-gradient(135deg, var(--bg3), var(--surface));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .project-banner.p1 { background: linear-gradient(135deg, #0a1628, #1a2a4a); }
+  .project-banner.p2 { background: linear-gradient(135deg, #1a0a28, #2a1a4a); }
+  .project-banner.p3 { background: linear-gradient(135deg, #0a2218, #1a3a28); }
+  .project-icon-big {
+    font-size: 4rem;
+    opacity: 0.6;
+  }
+  .project-banner-lines {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+  .project-body { padding: 1.8rem; }
+  .project-type {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 0.5rem;
+  }
+  .project-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.8rem;
+    font-family: 'Playfair Display', serif;
+  }
+  .project-desc { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.2rem; line-height: 1.7; }
+  .project-footer { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+ 
+  /* ── CERTIFICATIONS ── */
+  #certifications { background: var(--bg2); }
+  .certs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.2rem;
+  }
+  .cert-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    transition: all 0.3s;
+  }
+  .cert-card:hover { border-color: rgba(201,168,76,0.3); transform: translateX(4px); }
+  .cert-icon {
+    width: 42px; height: 42px;
+    border-radius: 10px;
+    background: var(--gold-dim);
+    border: 1px solid rgba(201,168,76,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+  .cert-name { font-size: 0.9rem; font-weight: 600; color: var(--white); margin-bottom: 0.3rem; }
+  .cert-issuer { font-size: 0.78rem; color: var(--gold); letter-spacing: 0.05em; }
+ 
+  /* ── BLOG ── */
+  #blog { background: var(--bg); }
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .blog-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .blog-card:hover { border-color: rgba(201,168,76,0.3); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
+  .blog-header {
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--bg3), var(--surface));
+    border-bottom: 1px solid var(--border);
+  }
+  .blog-tag {
+    display: inline-block;
+    padding: 0.2rem 0.7rem;
+    border-radius: 100px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .blog-tag.t1 { background: rgba(79,142,247,0.12); color: #93c5fd; border: 1px solid rgba(79,142,247,0.2); }
+  .blog-tag.t2 { background: rgba(52,211,153,0.1); color: #6ee7b7; border: 1px solid rgba(52,211,153,0.2); }
+  .blog-tag.t3 { background: rgba(201,168,76,0.12); color: var(--gold2); border: 1px solid rgba(201,168,76,0.2); }
+  .blog-tag.t4 { background: rgba(248,113,113,0.1); color: #fca5a5; border: 1px solid rgba(248,113,113,0.2); }
+  .blog-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.4;
+  }
+  .blog-body { padding: 1.5rem; }
+  .blog-excerpt { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.2rem; line-height: 1.7; }
+  .blog-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+  .blog-readmore { color: var(--gold); font-weight: 500; letter-spacing: 0.05em; }
+  .blog-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    backdrop-filter: blur(8px);
+  }
+  .blog-modal-overlay.open { display: flex; }
+  .blog-modal {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    max-width: 680px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 3rem;
+    position: relative;
+    animation: modalIn 0.3s ease;
+  }
+  @keyframes modalIn { from{transform:scale(0.95);opacity:0} to{transform:scale(1);opacity:1} }
+  .modal-close {
+    position: absolute;
+    top: 1.5rem; right: 1.5rem;
+    width: 34px; height: 34px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .modal-close:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+  .modal-tag { margin-bottom: 1rem; }
+  .modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+    line-height: 1.3;
+  }
+  .modal-content { color: var(--text-muted); font-size: 0.95rem; line-height: 1.9; }
+  .modal-content h4 { color: var(--gold); margin: 1.5rem 0 0.5rem; font-size: 1rem; }
+  .modal-content p { margin-bottom: 1rem; }
+  .modal-content ul { padding-left: 1.2rem; margin-bottom: 1rem; }
+  .modal-content li { margin-bottom: 0.4rem; }
+  .modal-meta { font-size: 0.75rem; color: var(--text-dim); margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+ 
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 4rem;
+    text-align: center;
+  }
+  .footer-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+  .footer-name span { color: var(--gold); }
+  .footer-tagline { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 2rem; }
+  .footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
+  .footer-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .footer-link:hover { color: var(--gold); }
+  .footer-copy { color: var(--text-dim); font-size: 0.78rem; }
+ 
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+  .fade-up { opacity: 0; transform: translateY(24px); transition: all 0.7s ease; }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+ 
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 2rem; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    #hero { padding: 7rem 2rem 4rem; }
+    section { padding: 5rem 2rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .hero-stats { gap: 2rem; }
+    footer { padding: 3rem 2rem; }
+    .hero-scroll { display: none; }
+    .nav-links.open {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 60px; left: 0; right: 0;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      gap: 1.5rem;
+    }
+  }
+</style>
+</head>
+<body>
+ 
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">Hariprasaad<span>.</span></div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#certifications">Certifications</a></li>
+    <li><a href="#blog">Blog</a></li>
+    <li><a href="mailto:hariprasaadmurugesan2004@gmail.com" class="nav-cta">Hire Me</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+ 
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Available for Opportunities</div>
+    <h1 class="hero-name">Hariprasaad<br><span class="gold">M.</span></h1>
+    <div class="hero-title">
+      <span id="typeText">Full Stack Developer</span><span class="cursor"></span>
+    </div>
+    <p class="hero-desc">
+      Enthusiastic Full Stack Developer with strong expertise in Python, MERN stack, and AI-powered development. Building scalable, performant web applications with clean, maintainable code.
+    </p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn-primary">View Projects ↓</a>
+      <a href="mailto:hariprasaadmurugesan2004@gmail.com" class="btn-outline">✉ Contact Me</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">3+</div>
+        <div class="stat-label">Internships</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">3+</div>
+        <div class="stat-label">Projects</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Certifications</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">10+</div>
+        <div class="stat-label">AI Tools</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</section>
+ 
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">Who I Am</div>
+  <div class="about-grid">
+    <div class="about-avatar-wrap fade-up">
+      <div class="avatar-card">
+        <div class="avatar-initials">HM</div>
+        <div class="avatar-name">Hariprasaad M</div>
+        <div class="avatar-role">MERN Stack · Full Stack · Fresher</div>
+        <div class="avatar-info">
+          <div><span>📍 Location</span><span>Chennai, India</span></div>
+          <div><span>🎓 Degree</span><span>BCA — 2025</span></div>
+          <div><span>🏫 College</span><span>Sri Vasavi College</span></div>
+          <div><span>📞 Phone</span><span>+91-7708043054</span></div>
+          <div><span>🔓 Status</span><span>Open to Relocate</span></div>
+        </div>
+      </div>
+      <div class="contact-links" style="margin-top:1.2rem">
+        <a href="mailto:hariprasaadmurugesan2004@gmail.com" class="contact-item">
+          <div class="contact-icon">✉</div>
+          hariprasaadmurugesan2004@gmail.com
+        </a>
+        <a href="https://linkedin.com/in/hari-prasaad-70453294" target="_blank" class="contact-item">
+          <div class="contact-icon">in</div>
+          linkedin.com/in/hari-prasaad-70453294
+        </a>
+      </div>
+    </div>
+    <div class="about-text fade-up">
+      <div class="section-label">About Me</div>
+      <h3>Building the Web, One Stack at a Time</h3>
+      <p>
+        I'm an enthusiastic Full Stack Developer with a deep passion for crafting seamless digital experiences. My journey spans both Python-based backends and modern JavaScript ecosystems — from Django REST APIs to real-time MERN applications.
+      </p>
+      <p>
+        During my internships at Orionshift, BTree Systems, and Sun Software Solution, I gained hands-on production experience building employee management systems, sales service platforms, and responsive frontends. I thrive in dynamic environments where I can continuously learn and ship meaningful products.
+      </p>
+      <p>
+        Beyond traditional development, I actively leverage AI tools like GitHub Copilot, Claude, ChatGPT, and Cursor to accelerate development workflows and bring projects to life faster. I believe the future of development lies at the intersection of human creativity and AI assistance.
+      </p>
+      <div class="about-tags">
+        <span class="tag">Problem Solver</span>
+        <span class="tag">Clean Code Advocate</span>
+        <span class="tag">AI-Enhanced Dev</span>
+        <span class="tag">Open to Relocation</span>
+        <span class="tag">Fast Learner</span>
+        <span class="tag">Team Collaborator</span>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label">Technical Expertise</div>
+  <h2 class="section-title">Skills & Technologies</h2>
+  <p class="section-sub">A comprehensive toolkit spanning frontend, backend, databases, real-time systems, and AI-powered development.</p>
+  <div class="skills-grid">
+    <div class="skill-card fade-up">
+      <div class="skill-cat-icon">🎨</div>
+      <div class="skill-cat">Frontend</div>
+      <div class="skill-name">User Interface Development</div>
+      <div class="skill-pills">
+        <span class="pill">HTML5</span>
+        <span class="pill">CSS3</span>
+        <span class="pill">JavaScript</span>
+        <span class="pill">React</span>
+        <span class="pill">Tailwind CSS</span>
+        <span class="pill">Bootstrap</span>
+        <span class="pill">Vite</span>
+      </div>
+    </div>
+    <div class="skill-card fade-up">
+      <div class="skill-cat-icon">⚙️</div>
+      <div class="skill-cat">Backend</div>
+      <div class="skill-name">Server-side Engineering</div>
+      <div class="skill-pills">
+        <span class="pill">Node.js</span>
+        <span class="pill">Express.js</span>
+        <span class="pill">Django</span>
+        <span class="pill">Flask</span>
+        <span class="pill">Python</span>
+        <span class="pill">REST APIs</span>
+      </div>
+    </div>
+    <div class="skill-card fade-up">
+      <div class="skill-cat-icon">🗄️</div>
+      <div class="skill-cat">Database</div>
+      <div class="skill-name">Data Management</div>
+      <div class="skill-pills">
+        <span class="pill">MongoDB</span>
+        <span class="pill">Mongoose</span>
+        <span class="pill">Atlas</span>
+        <span class="pill">MySQL</span>
+      </div>
+    </div>
+    <div class="skill-card fade-up">
+      <div class="skill-cat-icon">⚡</div>
+      <div class="skill-cat">Realtime & APIs</div>
+      <div class="skill-name">Live Communication Systems</div>
+      <div class="skill-pills">
+        <span class="pill">Socket.IO</span>
+        <span class="pill">WebSocket</span>
+        <span class="pill">JWT Auth</span>
+        <span class="pill">bcrypt</span>
+        <span class="pill">REST API</span>
+      </div>
+    </div>
+    <div class="skill-card fade-up">
+      <div class="skill-cat-icon">🛠️</div>
+      <div class="skill-cat">Tools & Deployment</div>
+      <div class="skill-name">DevOps & Workflow</div>
+      <div class="skill-pills">
+        <span class="pill">Git</span>
+        <span class="pill">GitHub</span>
+        <span class="pill">Postman</span>
+        <span class="pill">Docker</span>
+        <span class="pill">NGINX</span>
+        <span class="pill">Vercel</span>
+        <span class="pill">Netlify</span>
+        <span class="pill">Render</span>
+        <span class="pill">Firebase</span>
+      </div>
+    </div>
+    <div class="skill-card ai-card fade-up">
+      <div class="skill-cat-icon">🤖</div>
+      <div class="skill-cat">AI Tools & Technologies</div>
+      <div class="skill-name">AI-Powered Development</div>
+      <div class="skill-pills">
+        <span class="pill">ChatGPT GPT-4/5</span>
+        <span class="pill">Claude 3</span>
+        <span class="pill">GitHub Copilot</span>
+        <span class="pill">Gemini 1.5/2.0</span>
+        <span class="pill">Codex</span>
+        <span class="pill">Cursor</span>
+        <span class="pill">Figma</span>
+        <span class="pill">Canva</span>
+        <span class="pill">Adobe PS</span>
+        <span class="pill">AI Prompt Eng.</span>
+        <span class="pill">Gen AI</span>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">Career Journey</div>
+  <h2 class="section-title">Experience & Internships</h2>
+  <p class="section-sub">Hands-on experience building real-world applications across multiple stacks and domains.</p>
+  <div class="timeline">
+ 
+    <div class="timeline-item fade-up">
+      <div class="timeline-dot active"></div>
+      <div class="timeline-card">
+        <div class="timeline-meta">
+          <span class="timeline-company">Orionshift</span>
+          <span class="timeline-duration">▸ 2 Months · MERN Intern</span>
+        </div>
+        <div class="timeline-role">MERN Stack Developer Intern</div>
+        <ul class="timeline-points">
+          <li>Developed a full-stack Employee Management System (EMS) using the MERN stack</li>
+          <li>Built responsive UI components and implemented RESTful API functionalities</li>
+          <li>Integrated real-time communication features using Socket.IO</li>
+          <li>Managed database operations, authentication workflows, and CRUD operations</li>
+          <li>Collaborated in debugging, testing, and improving application performance</li>
+        </ul>
+        <div class="timeline-tech">
+          <span class="tech-badge">React</span>
+          <span class="tech-badge">Node.js</span>
+          <span class="tech-badge">Express.js</span>
+          <span class="tech-badge">MongoDB</span>
+          <span class="tech-badge">Socket.IO</span>
+          <span class="tech-badge">JWT</span>
+          <span class="tech-badge">Tailwind CSS</span>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="timeline-item fade-up">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <div class="timeline-meta">
+          <span class="timeline-company">BTree Systems</span>
+          <span class="timeline-duration">▸ 6 Months · Python Intern</span>
+        </div>
+        <div class="timeline-role">Python Full Stack Development Intern</div>
+        <ul class="timeline-points">
+          <li>Developed full-stack web applications using Python, Django, HTML, CSS, and JavaScript</li>
+          <li>Worked on backend business logic, database integration, and REST-based request handling</li>
+          <li>Developed and tested CRUD functionalities with proper validation and exception handling</li>
+          <li>Assisted in debugging backend functionalities and improving application reliability</li>
+        </ul>
+        <div class="timeline-tech">
+          <span class="tech-badge">Python</span>
+          <span class="tech-badge">Django</span>
+          <span class="tech-badge">MySQL</span>
+          <span class="tech-badge">REST APIs</span>
+          <span class="tech-badge">HTML/CSS/JS</span>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="timeline-item fade-up">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <div class="timeline-meta">
+          <span class="timeline-company">Sun Software Solution</span>
+          <span class="timeline-duration">▸ 30 Days · Frontend Intern</span>
+        </div>
+        <div class="timeline-role">Frontend Web Development Intern</div>
+        <ul class="timeline-points">
+          <li>Developed responsive and user-friendly web interfaces using HTML, CSS, and JavaScript</li>
+          <li>Implemented modern UI layouts with cross-browser compatibility and mobile responsiveness</li>
+          <li>Integrated frontend components with backend APIs for seamless data communication</li>
+          <li>Improved frontend structure and UX through optimized UI implementation techniques</li>
+        </ul>
+        <div class="timeline-tech">
+          <span class="tech-badge">HTML5</span>
+          <span class="tech-badge">CSS3</span>
+          <span class="tech-badge">JavaScript</span>
+          <span class="tech-badge">Responsive Design</span>
+        </div>
+      </div>
+    </div>
+ 
+  </div>
+</section>
+ 
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label">What I've Built</div>
+  <h2 class="section-title">Featured Projects</h2>
+  <p class="section-sub">Real-world applications built with modern stacks, from REST APIs to full-stack platforms.</p>
+  <div class="projects-grid">
+ 
+    <div class="project-card fade-up">
+      <div class="project-banner p2">
+        <div class="project-banner-lines"></div>
+        <div class="project-icon-big">👥</div>
+      </div>
+      <div class="project-body">
+        <div class="project-type">MERN Stack · Full Stack</div>
+        <div class="project-title">Employee Management System</div>
+        <p class="project-desc">A comprehensive full-stack EMS application featuring secure authentication, real-time chat, RESTful APIs, and responsive interfaces. Built during the Orionshift internship.</p>
+        <div class="project-footer">
+          <span class="tech-badge">React</span>
+          <span class="tech-badge">Node.js</span>
+          <span class="tech-badge">MongoDB</span>
+          <span class="tech-badge">Socket.IO</span>
+          <span class="tech-badge">JWT</span>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="project-card fade-up">
+      <div class="project-banner p1">
+        <div class="project-banner-lines"></div>
+        <div class="project-icon-big">💧</div>
+      </div>
+      <div class="project-body">
+        <div class="project-type">Python · Django · Backend</div>
+        <div class="project-title">Water Purifier Sales & Service Management</div>
+        <p class="project-desc">Backend system for managing product inventory, service requests, and customer data. Features CRUD APIs with validation, MySQL schemas, and Django Admin for operational workflows.</p>
+        <div class="project-footer">
+          <span class="tech-badge">Python</span>
+          <span class="tech-badge">Django</span>
+          <span class="tech-badge">MySQL</span>
+          <span class="tech-badge">REST APIs</span>
+          <span class="tech-badge">Postman</span>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="project-card fade-up">
+      <div class="project-banner p3">
+        <div class="project-banner-lines"></div>
+        <div class="project-icon-big">🌐</div>
+      </div>
+      <div class="project-body">
+        <div class="project-type">Python · Django · Portfolio</div>
+        <div class="project-title">Personal Portfolio Website</div>
+        <p class="project-desc">A full-stack personal portfolio with Python/Django backend serving content reliably. Focused on clean routing, error-free page loads, responsive UI, and stable backend integration.</p>
+        <div class="project-footer">
+          <span class="tech-badge">Python</span>
+          <span class="tech-badge">Django</span>
+          <span class="tech-badge">HTML/CSS</span>
+          <span class="tech-badge">JavaScript</span>
+        </div>
+      </div>
+    </div>
+ 
+  </div>
+</section>
+ 
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="section-label">Credentials</div>
+  <h2 class="section-title">Certifications</h2>
+  <p class="section-sub">Industry-recognized certifications validating expertise across full stack development and AI.</p>
+  <div class="certs-grid">
+    <div class="cert-card fade-up">
+      <div class="cert-icon">🖥️</div>
+      <div>
+        <div class="cert-name">Frontend Web Development</div>
+        <div class="cert-issuer">Sun Software Solution</div>
+      </div>
+    </div>
+    <div class="cert-card fade-up">
+      <div class="cert-icon">🐍</div>
+      <div>
+        <div class="cert-name">Python Full Stack Development</div>
+        <div class="cert-issuer">BTree Systems</div>
+      </div>
+    </div>
+    <div class="cert-card fade-up">
+      <div class="cert-icon">⚛️</div>
+      <div>
+        <div class="cert-name">MERN Stack Development</div>
+        <div class="cert-issuer">Orionshift</div>
+      </div>
+    </div>
+    <div class="cert-card fade-up">
+      <div class="cert-icon">🤖</div>
+      <div>
+        <div class="cert-name">AI Fundamentals</div>
+        <div class="cert-issuer">GUVI</div>
+      </div>
+    </div>
+    <div class="cert-card fade-up">
+      <div class="cert-icon">⚡</div>
+      <div>
+        <div class="cert-name">AI-Powered Development</div>
+        <div class="cert-issuer">Udemy</div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- BLOG -->
+<section id="blog">
+  <div class="section-label">Thoughts & Insights</div>
+  <h2 class="section-title">Personal Blog</h2>
+  <p class="section-sub">Sharing learnings, experiences, and insights from my journey as a developer.</p>
+  <div class="blog-grid">
+ 
+    <div class="blog-card fade-up" onclick="openBlog(0)">
+      <div class="blog-header">
+        <div class="blog-tag t1">MERN Stack</div>
+        <div class="blog-title">Building Real-Time Features with Socket.IO in a MERN App</div>
+      </div>
+      <div class="blog-body">
+        <p class="blog-excerpt">How I implemented live chat and notifications in the Employee Management System using WebSockets — lessons learned from my Orionshift internship.</p>
+        <div class="blog-meta">
+          <span>5 min read · May 2025</span>
+          <span class="blog-readmore">Read more →</span>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="blog-card fade-up" onclick="openBlog(1)">
+      <div class="blog-header">
+        <div class="blog-tag t3">AI Tools</div>
+        <div class="blog-title">How I Use AI Tools to Accelerate My Development Workflow</div>
+      </div>
+      <div class="blog-body">
+        <p class="blog-excerpt">My practical experience using Claude, ChatGPT, GitHub Copilot, and Cursor together to ship projects faster — without losing engineering depth.</p>
+        <div class="blog-meta">
+          <span>7 min read · April 2025</span>
+          <span class="blog-readmore">Read more →</span>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="blog-card fade-up" onclick="openBlog(2)">
+      <div class="blog-header">
+        <div class="blog-tag t2">Django</div>
+        <div class="blog-title">Django REST APIs: Best Practices I Learned in Production</div>
+      </div>
+      <div class="blog-body">
+        <p class="blog-excerpt">From validating edge cases to optimizing MySQL queries — the real lessons from building backend APIs for the Water Purifier Management System.</p>
+        <div class="blog-meta">
+          <span>6 min read · March 2025</span>
+          <span class="blog-readmore">Read more →</span>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="blog-card fade-up" onclick="openBlog(3)">
+      <div class="blog-header">
+        <div class="blog-tag t4">Career</div>
+        <div class="blog-title">From BCA Student to Full Stack Developer: My Learning Path</div>
+      </div>
+      <div class="blog-body">
+        <p class="blog-excerpt">A candid look at how I went from learning HTML to building MERN applications, through three internships and five certifications — and what I'd do differently.</p>
+        <div class="blog-meta">
+          <span>8 min read · February 2025</span>
+          <span class="blog-readmore">Read more →</span>
+        </div>
+      </div>
+    </div>
+ 
+  </div>
+</section>
+ 
+<!-- BLOG MODAL -->
+<div class="blog-modal-overlay" id="blogModal" onclick="closeBlogOnOverlay(event)">
+  <div class="blog-modal">
+    <button class="modal-close" onclick="closeBlog()">✕</button>
+    <div class="modal-tag" id="modalTag"></div>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-content" id="modalContent"></div>
+    <div class="modal-meta" id="modalMeta"></div>
+  </div>
+</div>
+ 
+<!-- FOOTER -->
+<footer>
+  <div class="footer-name">Hari<span>prasaad</span> M.</div>
+  <div class="footer-tagline">Full Stack Developer · Chennai, India · Open to Opportunities</div>
+  <div class="footer-links">
+    <a href="#about" class="footer-link">About</a>
+    <a href="#skills" class="footer-link">Skills</a>
+    <a href="#experience" class="footer-link">Experience</a>
+    <a href="#projects" class="footer-link">Projects</a>
+    <a href="#blog" class="footer-link">Blog</a>
+    <a href="mailto:hariprasaadmurugesan2004@gmail.com" class="footer-link">Contact</a>
+  </div>
+  <div class="footer-copy">© 2025 Hariprasaad M. Crafted with care & coffee ☕</div>
+</footer>
+ 
+<script>
+// ── TYPEWRITER ──
+const titles = ["Full Stack Developer", "MERN Stack Engineer", "Python Backend Dev", "AI-Powered Builder", "React Developer"];
+let ti = 0, ci = 0, del = false;
+const typeEl = document.getElementById('typeText');
+function type() {
+  const t = titles[ti];
+  if (!del) {
+    typeEl.textContent = t.slice(0, ++ci);
+    if (ci === t.length) { del = true; setTimeout(type, 2000); return; }
+  } else {
+    typeEl.textContent = t.slice(0, --ci);
+    if (ci === 0) { del = false; ti = (ti + 1) % titles.length; }
+  }
+  setTimeout(type, del ? 60 : 90);
+}
+type();
+ 
+// ── SCROLL ANIMATIONS ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+ 
+// ── NAV SCROLL ──
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  nav.style.borderColor = window.scrollY > 50 ? 'rgba(201,168,76,0.15)' : 'var(--border)';
+});
+ 
+// ── HAMBURGER ──
+function toggleNav() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
+ 
+// ── BLOG DATA ──
+const blogs = [
+  {
+    tag: '<span class="blog-tag t1">MERN Stack</span>',
+    title: 'Building Real-Time Features with Socket.IO in a MERN App',
+    meta: '5 min read · May 2025',
+    content: `
+      <p>During my internship at Orionshift, one of the most exciting features I worked on was the real-time chat and notification system for the Employee Management System. Here's what I learned.</p>
+      <h4>Why Socket.IO?</h4>
+      <p>Traditional REST APIs follow a request-response model — the client asks, the server responds. But for a live chat system, you need the server to push data to clients as soon as something changes. Socket.IO makes this seamless with its event-driven architecture built on WebSockets.</p>
+      <h4>Setting Up the Server</h4>
+      <p>Integrating Socket.IO with Express.js was straightforward. I attached it to the HTTP server and defined event listeners for <code>connect</code>, <code>chat:message</code>, <code>disconnect</code>, and custom notification events.</p>
+      <h4>Key Challenges</h4>
+      <ul>
+        <li>Managing rooms for private and group chats</li>
+        <li>Persisting messages in MongoDB while keeping real-time delivery fast</li>
+        <li>Handling disconnection gracefully and reconnecting clients</li>
+        <li>Securing socket connections with JWT authentication middleware</li>
+      </ul>
+      <h4>Lessons Learned</h4>
+      <p>Always validate on the server side — never trust client-emitted events blindly. Namespace your socket events clearly (e.g., <code>chat:message</code> vs <code>notification:new</code>). And test edge cases like rapid reconnections and concurrent users early.</p>
+      <p>Real-time features add incredible value to enterprise apps. The EMS went from a static management tool to a live collaborative platform with these additions.</p>
+    `
+  },
+  {
+    tag: '<span class="blog-tag t3">AI Tools</span>',
+    title: 'How I Use AI Tools to Accelerate My Development Workflow',
+    meta: '7 min read · April 2025',
+    content: `
+      <p>As a fresher developer, one of the biggest advantages I have is growing up with AI tools. Here's how I integrate multiple AI assistants into my daily workflow without letting them replace the engineering thinking.</p>
+      <h4>My AI Stack</h4>
+      <ul>
+        <li><strong>GitHub Copilot</strong> — in-editor suggestions while I write code. Best for boilerplate and repetitive patterns.</li>
+        <li><strong>Cursor</strong> — AI-native IDE. I use it for refactoring and explaining complex codebases.</li>
+        <li><strong>Claude</strong> — for architecture decisions, debugging, and image reference in UI design.</li>
+        <li><strong>ChatGPT GPT-5</strong> — broad code assistance and project planning conversations.</li>
+      </ul>
+      <h4>The Right Mental Model</h4>
+      <p>AI tools are powerful when you know what you're building. If you don't understand the fundamentals, AI-generated code becomes a liability — you can't debug it, extend it, or explain it. I treat AI as a fast senior developer who accelerates my ideas, not one who replaces my thinking.</p>
+      <h4>Practical Workflow</h4>
+      <p>For a new feature, I first plan the approach myself, then use AI to speed up implementation of the parts I already understand. For debugging, I read the error and form a hypothesis before asking AI — this keeps my problem-solving skills sharp.</p>
+      <h4>The Future</h4>
+      <p>Developers who learn to work with AI effectively will be significantly more productive. The skill isn't just coding anymore — it's knowing how to prompt, evaluate, and integrate AI outputs into production-quality systems.</p>
+    `
+  },
+  {
+    tag: '<span class="blog-tag t2">Django</span>',
+    title: 'Django REST APIs: Best Practices I Learned in Production',
+    meta: '6 min read · March 2025',
+    content: `
+      <p>Working on the Water Purifier Sales & Service Management System at BTree Systems taught me more about production-grade API development than any tutorial ever could. Here are my key takeaways.</p>
+      <h4>Validate Everything</h4>
+      <p>Invalid input data is the most common source of production bugs. Django REST Framework's serializers handle most validation, but I learned to add custom validators for business rules — e.g., ensuring a service request's scheduled date is in the future, not just any valid date.</p>
+      <h4>Consistent API Responses</h4>
+      <p>Pick a response structure and stick to it. Every endpoint should return <code>{ success, data, message }</code> or a similar consistent shape. This makes frontend integration predictable and error handling uniform.</p>
+      <h4>MySQL Query Optimization</h4>
+      <p>Using <code>select_related()</code> and <code>prefetch_related()</code> correctly saved significant database round trips. I profiled slow endpoints with Django Debug Toolbar and eliminated N+1 query patterns.</p>
+      <h4>Django Admin as a Power Tool</h4>
+      <p>Don't underestimate Django Admin. Properly configured, it gives operations teams a functional interface with zero additional frontend work. Custom actions, list filters, and readonly fields made it genuinely useful for the client.</p>
+      <h4>Test with Real Conditions</h4>
+      <p>Postman collections with environment variables let me test APIs under production-like conditions — correct auth headers, realistic payloads, edge cases like empty strings and null values. Writing these tests upfront saved hours of debugging later.</p>
+    `
+  },
+  {
+    tag: '<span class="blog-tag t4">Career</span>',
+    title: 'From BCA Student to Full Stack Developer: My Learning Path',
+    meta: '8 min read · February 2025',
+    content: `
+      <p>When I started my BCA at Sri Vasavi College in 2022, I didn't fully know what "Full Stack Developer" meant. Three years, three internships, and five certifications later, here's the honest story of how I got here.</p>
+      <h4>The Beginning: HTML & Frontend Basics</h4>
+      <p>My first internship at Sun Software Solution was only 30 days, but it grounded me in the fundamentals. Building real pages that had to work across different browsers and screen sizes taught me discipline and attention to detail that pure coursework couldn't.</p>
+      <h4>Going Deeper with Python</h4>
+      <p>The 6-month internship at BTree Systems was transformative. Working on a real production backend in Python and Django showed me how enterprise applications are structured — error handling, database design, validation layers, and the importance of logging.</p>
+      <h4>Becoming a Full Stack Developer</h4>
+      <p>Orionshift completed the picture. Building an entire MERN application end-to-end — from MongoDB schemas to React components — gave me the confidence to call myself a full stack developer. The real-time features were my personal favorite challenge.</p>
+      <h4>What I'd Do Differently</h4>
+      <ul>
+        <li>Start contributing to open source earlier</li>
+        <li>Document projects better from day one</li>
+        <li>Learn Docker and containerization sooner</li>
+        <li>Build more personal projects to explore creative ideas</li>
+      </ul>
+      <h4>What's Next</h4>
+      <p>I'm actively looking for my first full-time role where I can continue growing, contribute to meaningful products, and keep learning from experienced engineers. If you're reading this and think I'd be a good fit — let's talk!</p>
+    `
+  }
+];
+ 
+function openBlog(i) {
+  const b = blogs[i];
+  document.getElementById('modalTag').innerHTML = b.tag;
+  document.getElementById('modalTitle').textContent = b.title;
+  document.getElementById('modalContent').innerHTML = b.content;
+  document.getElementById('modalMeta').textContent = b.meta;
+  document.getElementById('blogModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeBlog() {
+  document.getElementById('blogModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeBlogOnOverlay(e) {
+  if (e.target === document.getElementById('blogModal')) closeBlog();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBlog(); });
+</script>
+</body>
+</html>
